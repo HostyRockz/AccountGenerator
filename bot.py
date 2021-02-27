@@ -116,19 +116,22 @@ async def reset(event):
     
 @warnerstarkbot.on(events.NewMessage(pattern="^/broadcast"))
 async def reset(event):
-    if event.sender_id != Config.OWNER_ID:
-        print("A Non Owner Used This Cmd")
-        return
-    error = 0
-    ds = event.text.split(" ", maxsplit=1)[1]
-    ok = warner.get_all_users_id()
-    for s in ok:
-        try:
-            await warnerstarkbot.send_message(int(s), ds)
-        except:
-            error += 1
-            pass
-    await event.reply(f"Broadcast Done With {error} And Sucess in {len(ok) - error}!")    
+error_count = 0
+msgtobroadcast = event.pattern_match.group(1)
+if event.sender_id != Config.OWNER_ID:
+    await event.reply("**Fuck OFF Bitch !**")
+    return
+hmm = get_all_users()
+for starkcast in hmm:
+    try:
+        await UltraBot.send_message(int(starkcast.chat_id), msgtobroadcast)
+    except BaseException:
+        error_count += 1
+sent_count = error_count - len(hmm)
+await UltraBot.send_message(
+event.chat_id,
+      f"Broadcast Done in {sent_count} Group/Users and I got {error_count} Error and Total Number Was {len(userstobc)}",
+)
         
 async def clear_data():
     ok = warner.get_all_users_id()
